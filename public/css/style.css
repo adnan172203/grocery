@@ -431,8 +431,8 @@ ul.user-cart-item-list li img {
 
 .free-coffee {
   display: flex;
-  margin-left: -13px;
-  margin-top: 17px;
+  margin-left: -30px;
+  margin-top: 10px;
 }
 
 .free-coffee p {
@@ -525,6 +525,10 @@ ul.user-cart-item-list li img {
     margin-bottom: 30px;
   }
 
+  .filtertag-area ul {
+    width: 658px;
+  }
+
   .trending-items .item-card {
     width: 400px;
   }
@@ -545,6 +549,12 @@ ul.user-cart-item-list li img {
   }
 }
 @media only screen and (max-width: 800px) {
+  .searchbar .search-box {
+    width: 61%;
+  }
+  .searchbar-area .searchbar {
+    align-items: unset;
+  }
   .searchbar-area .searchbar {
     width: 600px;
   }
@@ -552,8 +562,12 @@ ul.user-cart-item-list li img {
     width: 400px;
   }
   .filtertag-area ul {
-    width: 523px;
-    justify-content: center;
+    width: 430px;
+    flex-direction: column;
+  }
+
+  .filtertag-area ul li {
+    margin-bottom: 10px;
   }
   .checkout-subtotal-details,
   .checkout-discount-details {
