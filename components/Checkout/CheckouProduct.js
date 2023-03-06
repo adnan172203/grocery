@@ -6,26 +6,17 @@ import BreadCrumb from '../Common/BreadCrumb';
 import CheckoutCalculation from './CheckoutCalculation';
 
 const CheckoutProduct = () => {
-  const { cart, dispatch } = useContext(CartContext);
+  const { cart, updateQuantity, removeItem } = useContext(CartContext);
 
-  const incrementQuantity = (item) => {
-    dispatch({
-      type: 'INCREMENT_PRODUCT',
-      payload: item,
-    });
+  const incrementQuantity = (itemId, newQuantity) => {
+    updateQuantity(itemId, newQuantity);
   };
-  const decrementQuantity = (item) => {
-    dispatch({
-      type: 'DECREMENT_PRODUCT',
-      payload: item,
-    });
+  const decrementQuantity = (itemId, newQuantity) => {
+    updateQuantity(itemId, newQuantity);
   };
 
   const removeCartItem = (id) => {
-    dispatch({
-      type: 'REMOVE_CART_ITEM',
-      payload: id,
-    });
+    removeItem(id);
     toast.success('Product Removed.', {
       style: {
         border: '1px solid #E86F6F',
@@ -39,7 +30,7 @@ const CheckoutProduct = () => {
     });
   };
 
-  let totalPrice = cart.items.reduce(
+  let totalPrice = cart.reduce(
     (acc, item) => acc + item.price.slice(1) * item.quantity,
     0
   );
@@ -51,7 +42,7 @@ const CheckoutProduct = () => {
         <div className='container'>
           <BreadCrumb />
           <div className='checkout-products'>
-            {cart.items.map((item, i) => (
+            {cart.map((item, i) => (
               <div className='checkout-product-item' key={i}>
                 <div className='checkout-product-content'>
                   <div className='checkout-product-image'>
@@ -59,66 +50,72 @@ const CheckoutProduct = () => {
                   </div>
                   <div className='checkout-product-details'>
                     <h2>{item.name}</h2>
-                    <p>{item.description.slice(0, 20)}</p>
+                    <p>{item.description}</p>
                   </div>
                 </div>
-                <div className='checkout-product-quantity'>
-                  <div className='product-quantity-adjust'>
-                    <span
-                      className='minus-button'
-                      onClick={() => decrementQuantity(item)}
-                    >
-                      <img src='../images/icon/minus.png' alt='' />
-                    </span>
-                    <div className='product-quantity'>
-                      <span>{item.quantity}</span>
+                <div className='responsive-cart'>
+                  <div className='checkout-product-quantity'>
+                    <div className='product-quantity-adjust'>
+                      <span
+                        className='minus-button'
+                        onClick={() =>
+                          decrementQuantity(item.id, item.quantity - 1)
+                        }
+                      >
+                        <img src='../images/icon/minus.png' alt='' />
+                      </span>
+                      <div className='product-quantity'>
+                        <span>{item.quantity}</span>
+                      </div>
+                      <span
+                        className='plus-button'
+                        onClick={() =>
+                          incrementQuantity(item.id, item.quantity + 1)
+                        }
+                      >
+                        <img src='../images/icon/plus.png' alt='' />
+                      </span>
                     </div>
-                    <span
-                      className='plus-button'
-                      onClick={() => incrementQuantity(item)}
-                    >
-                      <img src='../images/icon/plus.png' alt='' />
-                    </span>
-                  </div>
-                  <div className='checkout-product-availability'>
-                    <p>only {item.available - item.quantity} left</p>
-                    {item.name === 'Coca-Cola' && item.quantity > 6 ? (
-                      <div className='free-item'>
-                        <div className='free-item-image'>
-                          <span>
-                            <img src={item.img} alt='' />
-                          </span>
+                    <div className='checkout-product-availability'>
+                      <p>only {item.available - item.quantity} left</p>
+                      {item.name === 'Coca-Cola' && item.quantity > 6 ? (
+                        <div className='free-item'>
+                          <div className='free-item-image'>
+                            <span>
+                              <img src={item.img} alt='' />
+                            </span>
+                          </div>
+                          <p>1 Free Can Added</p>
                         </div>
-                        <p>1 Free Can Added</p>
-                      </div>
-                    ) : (
-                      ''
-                    )}
-                    {item.name === 'Croissants' && item.quantity > 3 ? (
-                      <div className='free-coffee'>
-                        <div className='free-coffee-image'>
-                          <span>
-                            <img
-                              src='../images/product/coffee-cup.jpg'
-                              alt=''
-                            />
-                          </span>
+                      ) : (
+                        ''
+                      )}
+                      {item.name === 'Croissants' && item.quantity > 3 ? (
+                        <div className='free-coffee'>
+                          <div className='free-coffee-image'>
+                            <span>
+                              <img
+                                src='../images/product/coffee-cup.jpg'
+                                alt=''
+                              />
+                            </span>
+                          </div>
+                          <p>1 Free Coffee Added</p>
                         </div>
-                        <p>1 Free Coffee Added</p>
-                      </div>
-                    ) : (
-                      ''
-                    )}
+                      ) : (
+                        ''
+                      )}
+                    </div>
                   </div>
-                </div>
-                <div className='checkout-product-price'>
-                  <p>£{Math.ceil(item.price.slice(1) * item.quantity)}</p>
-                </div>
-                <div
-                  className='checkout-product-delete'
-                  onClick={() => removeCartItem(item.id)}
-                >
-                  <img src='../images/icon/delete.png' alt='' />
+                  <div className='checkout-product-price'>
+                    <p>£{Math.ceil(item.price.slice(1) * item.quantity)}.00</p>
+                  </div>
+                  <div
+                    className='checkout-product-delete'
+                    onClick={() => removeCartItem(item.id)}
+                  >
+                    <img src='../images/icon/delete.png' alt='' />
+                  </div>
                 </div>
               </div>
             ))}

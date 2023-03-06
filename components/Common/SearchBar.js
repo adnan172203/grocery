@@ -36,7 +36,7 @@ const SearchBar = () => {
                     <img src='../images/icon/avatar.png' alt='' />
                   </li>
                   <li className='user-cart-icon'>
-                    <p>{cart.items.length}</p>
+                    <p>{cart.length}</p>
                     <Link href='/checkout'>
                       <i className='bx bxs-cart-alt'></i>
                     </Link>

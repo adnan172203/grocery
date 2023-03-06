@@ -3,7 +3,7 @@ const BreadCrumb = () => {
     <>
       <div className='breadcrumb-area'>
         <div className='breadcrumb-title'>
-          <h2>Treanding Items</h2>
+          <h2>Trending Items</h2>
         </div>
       </div>
     </>

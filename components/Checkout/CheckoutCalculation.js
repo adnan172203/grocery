@@ -7,7 +7,7 @@ const CheckoutCalculation = ({ totalPrice }) => {
         <div className='checkout-subtotal'>
           <div className='checkout-subtotal-details'>
             <h3>Subtotal</h3>
-            <p>£{Math.ceil(totalPrice)}</p>
+            <p>£{Math.ceil(totalPrice)}.00</p>
           </div>
         </div>
         <div className='checkout-discount'>
@@ -18,8 +18,10 @@ const CheckoutCalculation = ({ totalPrice }) => {
         </div>
         <div className='checkout-total'>
           <div className='checkout-total-details'>
-            <h3>Total</h3>
-            <p>£{Math.ceil(totalPrice)}</p>
+            <div className='checkout-total-details-flex'>
+              <h3>Total</h3>
+              <p>£{Math.ceil(totalPrice)}.00</p>
+            </div>
             <Link href='/place-order'>
               <button>Checkout</button>
             </Link>

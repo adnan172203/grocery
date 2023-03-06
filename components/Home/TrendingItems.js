@@ -5,12 +5,12 @@ import BreadCrumb from '../Common/BreadCrumb';
 import { CartContext } from '../../contexts';
 
 const TrendingItems = ({ products }) => {
-  const { dispatch, search } = useContext(CartContext);
+  const { search, addItem } = useContext(CartContext);
 
   const handleAddToCart = (item, i) => {
     let product = { ...item, id: i, quantity: 1 };
 
-    dispatch({ type: 'ADD_TO_CART', payload: product });
+    addItem(product);
     toast.success('Added to the cart');
   };
 
@@ -50,7 +50,7 @@ const TrendingItems = ({ products }) => {
 
                       <div className='item-purchase'>
                         <ul>
-                          <li>{product.price}p</li>
+                          <li>{product.price}</li>
                           <li onClick={() => handleAddToCart(product, i)}>
                             <i className='bx bx-cart-alt'></i>
                           </li>
