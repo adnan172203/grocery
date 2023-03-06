@@ -9,9 +9,14 @@ const CheckoutProduct = () => {
   const { cart, updateQuantity, removeItem } = useContext(CartContext);
 
   const incrementQuantity = (itemId, newQuantity) => {
-    updateQuantity(itemId, newQuantity);
+    const item = cart.find((item) => item.id === itemId);
+    if (newQuantity <= item.available && newQuantity >= 1) {
+      updateQuantity(itemId, newQuantity);
+    }
+    // updateQuantity(itemId, newQuantity);
   };
   const decrementQuantity = (itemId, newQuantity) => {
+    newQuantity = Math.max(newQuantity, 1);
     updateQuantity(itemId, newQuantity);
   };
 
