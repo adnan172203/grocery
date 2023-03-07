@@ -10,10 +10,10 @@ const CheckoutProduct = () => {
 
   const incrementQuantity = (itemId, newQuantity) => {
     const item = cart.find((item) => item.id === itemId);
+
     if (newQuantity <= item.available && newQuantity >= 1) {
       updateQuantity(itemId, newQuantity);
     }
-    // updateQuantity(itemId, newQuantity);
   };
   const decrementQuantity = (itemId, newQuantity) => {
     newQuantity = Math.max(newQuantity, 1);
@@ -35,17 +35,38 @@ const CheckoutProduct = () => {
     });
   };
 
-  let totalPrice = cart.reduce(
-    (acc, item) => acc + item.price.slice(1) * item.quantity,
+  let subTotal = cart.reduce(
+    (acc, item) => acc + Math.ceil(item.price.slice(1)) * item.quantity,
     0
   );
+
+  //discount
+  let cokeDiscount = 0;
+  let coffeeDiscount = 0;
+
+  const cokeItems = cart.find((item) => item.name === 'Coca-Cola');
+  const coffeeItems = cart.find((item) => item.name === 'Croissants');
+
+  if (cokeItems && cokeItems.quantity >= 6) {
+    const offerCount = Math.floor(cokeItems.quantity / 6);
+    cokeDiscount = offerCount * cokeItems.price.slice(1);
+    subTotal += 1;
+  }
+  if (coffeeItems && coffeeItems.quantity >= 3) {
+    const offerCount = Math.floor(coffeeItems.quantity / 3);
+    coffeeDiscount = offerCount * 0.65;
+    subTotal += 1;
+  }
+
+  let discount = cokeDiscount + coffeeDiscount;
+  let totalPrice = subTotal - Math.ceil(discount);
 
   return (
     <>
       <Toaster position='top-center' reverseOrder={false} />
       <div className='checkout-product-area'>
         <div className='container'>
-          <BreadCrumb />
+          <BreadCrumb title='Checkout' />
           <div className='checkout-products'>
             {cart.map((item, i) => (
               <div className='checkout-product-item' key={i}>
@@ -83,7 +104,7 @@ const CheckoutProduct = () => {
                     </div>
                     <div className='checkout-product-availability'>
                       <p>only {item.available - item.quantity} left</p>
-                      {item.name === 'Coca-Cola' && item.quantity > 6 ? (
+                      {item.name === 'Coca-Cola' && item.quantity > 5 ? (
                         <div className='free-item'>
                           <div className='free-item-image'>
                             <span>
@@ -91,11 +112,12 @@ const CheckoutProduct = () => {
                             </span>
                           </div>
                           <p>1 Free Can Added</p>
+                          <p className='discount-money'>£1.00</p>
                         </div>
                       ) : (
                         ''
                       )}
-                      {item.name === 'Croissants' && item.quantity > 3 ? (
+                      {item.name === 'Croissants' && item.quantity > 2 ? (
                         <div className='free-coffee'>
                           <div className='free-coffee-image'>
                             <span>
@@ -106,6 +128,7 @@ const CheckoutProduct = () => {
                             </span>
                           </div>
                           <p>1 Free Coffee Added</p>
+                          <p className='discount-coffee'>£1.00</p>
                         </div>
                       ) : (
                         ''
@@ -113,7 +136,7 @@ const CheckoutProduct = () => {
                     </div>
                   </div>
                   <div className='checkout-product-price'>
-                    <p>£{Math.ceil(item.price.slice(1) * item.quantity)}.00</p>
+                    <p>£{Math.ceil(item.price.slice(1)) * item.quantity}.00</p>
                   </div>
                   <div
                     className='checkout-product-delete'
@@ -126,7 +149,11 @@ const CheckoutProduct = () => {
             ))}
           </div>
 
-          <CheckoutCalculation totalPrice={totalPrice} />
+          <CheckoutCalculation
+            subTotal={subTotal}
+            totalPrice={totalPrice}
+            discount={discount}
+          />
         </div>
       </div>
     </>

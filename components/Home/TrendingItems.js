@@ -19,7 +19,7 @@ const TrendingItems = ({ products }) => {
       <Toaster position='top-center' reverseOrder={false} />
       <div className='trending-items-area'>
         <div className='container'>
-          <BreadCrumb />
+          <BreadCrumb title='Trending Items' />
           <div className='trending-items'>
             {products
               .filter((item) => {
