@@ -5,6 +5,10 @@ const CartContext = createContext();
 const CartProvider = ({ children }) => {
   const [search, setSearch] = useState('');
 
+  // if (search) {
+  //   router.push('/');
+  // }
+
   const [cart, setCart] = useState([]);
 
   const addItem = (item) => {

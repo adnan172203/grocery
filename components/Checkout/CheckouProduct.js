@@ -5,14 +5,20 @@ import toast, { Toaster } from 'react-hot-toast';
 import BreadCrumb from '../Common/BreadCrumb';
 import CheckoutCalculation from './CheckoutCalculation';
 
-const CheckoutProduct = () => {
-  const { cart, updateQuantity, removeItem } = useContext(CartContext);
+const CheckoutProduct = ({ products }) => {
+  const { cart, updateQuantity, removeItem, addItem } = useContext(CartContext);
+
+  const coffeeItems = products.find((item) => item.name === 'Coffee');
+  const croiItems = cart.find((item) => item.name === 'Croissants');
 
   const incrementQuantity = (itemId, newQuantity) => {
     const item = cart.find((item) => item.id === itemId);
 
     if (newQuantity <= item.available && newQuantity >= 1) {
       updateQuantity(itemId, newQuantity);
+    }
+    if (croiItems.quantity >= 3) {
+      addItem(coffeeItems);
     }
   };
   const decrementQuantity = (itemId, newQuantity) => {
@@ -36,7 +42,7 @@ const CheckoutProduct = () => {
   };
 
   let subTotal = cart.reduce(
-    (acc, item) => acc + Math.ceil(item.price.slice(1)) * item.quantity,
+    (acc, item) => acc + item.price.slice(1) * item.quantity,
     0
   );
 
@@ -45,21 +51,20 @@ const CheckoutProduct = () => {
   let coffeeDiscount = 0;
 
   const cokeItems = cart.find((item) => item.name === 'Coca-Cola');
-  const coffeeItems = cart.find((item) => item.name === 'Croissants');
 
   if (cokeItems && cokeItems.quantity >= 6) {
     const offerCount = Math.floor(cokeItems.quantity / 6);
     cokeDiscount = offerCount * cokeItems.price.slice(1);
     subTotal += 1;
   }
-  if (coffeeItems && coffeeItems.quantity >= 3) {
-    const offerCount = Math.floor(coffeeItems.quantity / 3);
+  if (croiItems && croiItems.quantity >= 3) {
+    const offerCount = Math.floor(croiItems.quantity / 3);
     coffeeDiscount = offerCount * 0.65;
     subTotal += 1;
   }
 
   let discount = cokeDiscount + coffeeDiscount;
-  let totalPrice = subTotal - Math.ceil(discount);
+  let totalPrice = subTotal - discount;
 
   return (
     <>
@@ -91,7 +96,12 @@ const CheckoutProduct = () => {
                         <img src='../images/icon/minus.png' alt='' />
                       </span>
                       <div className='product-quantity'>
-                        <span>{item.quantity}</span>
+                        {item.name === 'Coca-Cola' && item.quantity >= 6 ? (
+                          <span>{item.quantity + 1}</span>
+                        ) : (
+                          <span>{item.quantity}</span>
+                        )}
+                        {/* <span>{item.quantity}</span> */}
                       </div>
                       <span
                         className='plus-button'
@@ -103,7 +113,12 @@ const CheckoutProduct = () => {
                       </span>
                     </div>
                     <div className='checkout-product-availability'>
-                      <p>only {item.available - item.quantity} left</p>
+                      {item.name === 'Coca-Cola' && item.quantity >= 6 ? (
+                        <p>only {item.available - item.quantity - 1} left</p>
+                      ) : (
+                        <p>only {item.available - item.quantity} left</p>
+                      )}
+                      {/* <p>only {item.available - item.quantity} left</p> */}
                       {item.name === 'Coca-Cola' && item.quantity > 5 ? (
                         <div className='free-item'>
                           <div className='free-item-image'>
@@ -112,7 +127,7 @@ const CheckoutProduct = () => {
                             </span>
                           </div>
                           <p>1 Free Can Added</p>
-                          <p className='discount-money'>£1.00</p>
+                          <p className='discount-money'>£0.99</p>
                         </div>
                       ) : (
                         ''
@@ -128,7 +143,6 @@ const CheckoutProduct = () => {
                             </span>
                           </div>
                           <p>1 Free Coffee Added</p>
-                          <p className='discount-coffee'>£1.00</p>
                         </div>
                       ) : (
                         ''
@@ -136,7 +150,7 @@ const CheckoutProduct = () => {
                     </div>
                   </div>
                   <div className='checkout-product-price'>
-                    <p>£{Math.ceil(item.price.slice(1)) * item.quantity}.00</p>
+                    <p>£{(item.price.slice(1) * item.quantity).toFixed(2)}</p>
                   </div>
                   <div
                     className='checkout-product-delete'

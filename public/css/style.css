@@ -283,7 +283,7 @@ ul.user-cart-item-list li img {
 
 .checkout-products {
   max-width: 1200px;
-  padding: 0 2rem;
+  padding: 0 7rem;
 }
 
 .checkout-product-details {
@@ -395,6 +395,8 @@ ul.user-cart-item-list li img {
 .checkout-total-details p {
   color: #82828b;
   font-family: Almarai;
+  width: 77px;
+  text-align: right;
 }
 
 .plus-button,
@@ -538,6 +540,10 @@ ul.user-cart-item-list li img {
     padding: 0 2rem;
   }
   .trending-items-area .trending-items {
+    padding: 0 2rem;
+  }
+
+  .checkout-products {
     padding: 0 2rem;
   }
 

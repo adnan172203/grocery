@@ -51,6 +51,19 @@ const TrendingItems = ({ products }) => {
                       <div className='item-purchase'>
                         <ul>
                           <li>{product.price}</li>
+                          {/* {croiItems && croiItems.quantity >= 3 ? (
+                            <li
+                              onClick={() =>
+                                handleAddToCart(...coffeeItems, i + 1)
+                              }
+                            >
+                              <i className='bx bx-cart-alt'></i>
+                            </li>
+                          ) : (
+                            <li onClick={() => handleAddToCart(product, i)}>
+                              <i className='bx bx-cart-alt'></i>
+                            </li>
+                          )} */}
                           <li onClick={() => handleAddToCart(product, i)}>
                             <i className='bx bx-cart-alt'></i>
                           </li>

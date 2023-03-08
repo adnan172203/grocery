@@ -1,9 +1,18 @@
 import { useContext } from 'react';
+import { useRouter } from 'next/router';
 import { CartContext } from '../../contexts';
 import Link from 'next/link';
 
 const SearchBar = () => {
-  const { cart, setSearch } = useContext(CartContext);
+  const router = useRouter();
+  const { cart, setSearch, search } = useContext(CartContext);
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    if (search) {
+      router.push('/');
+    }
+  };
 
   return (
     <>
@@ -18,10 +27,11 @@ const SearchBar = () => {
               </div>
 
               <div className='search-box'>
-                <form>
+                <form onSubmit={submitHandler}>
                   <input
                     type='text'
                     placeholder='Search'
+                    value={search}
                     onChange={(e) => setSearch(e.target.value)}
                   />
                 </form>
